@@ -106,13 +106,14 @@ if __name__ == '__main__':
 	# See https://docs.python.org/3/library/argparse.html#formatter-class.
 	parser = argparse.ArgumentParser(description='netcat',
 		formatter_class = argparse.RawDescriptionHelpFormatter,
-		epilog=textwrap.dedent('''Example:
-	netcat.py -t 192.168.1.108 -p 5555 -l -c # command shell
-	netcat.py -t 192.168.1.108 -p 5555 -l -u=foo.txt # upload to file
-	netcat.py -t 192.168.1.108 -p 5555 -l -e=\"cat /etc/passwd\" # execute command
-	echo 'ABC' | netcat.py -t 192.168.1.108 -p 135 # echo text to server port 135
-	netcat.py -t 192.168.1.108 -p 5555 # connect to server
-	'''))
+		# See https://docs.python.org/3/library/textwrap.html#textwrap.dedent.
+		epilog=textwrap.dedent('''		Example:
+		  netcat.py -t 192.168.1.108 -p 5555 -l -c # command shell
+		  netcat.py -t 192.168.1.108 -p 5555 -l -u=foo.txt # upload to file
+		  netcat.py -t 192.168.1.108 -p 5555 -l -e=\"cat /etc/passwd\" # execute command
+		  echo 'ABC' | netcat.py -t 192.168.1.108 -p 135 # echo text to server port 135
+		  netcat.py -t 192.168.1.108 -p 5555 # connect to server
+		'''))
 	# See https://docs.python.org/3/library/argparse.html#action.
 	parser.add_argument('-c', '--command', action='store_true', help='command shell')
 	parser.add_argument('-e', '--execute', help='execute specified command')
