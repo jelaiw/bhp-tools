@@ -24,6 +24,7 @@ class NetCat:
 		self.args = args
 		self.buffer = buffer
 		self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		# See https://docs.python.org/3/library/socket.html#socket.socket.setsockopt, also SO_REUSEADDR is documented in notes elsewhere on this page.
 		self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
 	def run(self):
