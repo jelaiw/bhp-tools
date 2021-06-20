@@ -38,5 +38,71 @@ def receive_from(connection):
 		pass
 	return buffer
 
+def request_handler(buffer):
+	# Perform packet modifications.
+	return buffer
+
+def response_handler(buffer):
+	# Perform packet modifications.
+	return buffer
+
+def proxy_handler(client_socket, remote_host, remote_port, receive_first):
+	remote_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	remote_socket.connect((remote_host, remote_port))
+
+	if receive_first:
+		remote_buffer = receive_from(remote_socket)
+		hexdump(remote_buffer)
+
+	while True:
+		local_buffer = receive_from(client_socket)
+		if len(local_buffer):
+			line = "[==>] Received %d bytes from localhost." % len(local_buffer)
+			print(line)
+			hexdump(local_buffer)
+
+			local_buffer = request_handler(local_buffer)
+			remote_socket.send(local_buffer)
+			print("[==>] Sent to remote.")
+
+		remote_buffer = receive_from(remote_socket)
+		if len(remote_buffer):
+			print("[<==] Received %d bytes from remote." % len(remote_buffer))
+			hexdump(remote_buffer)
+
+			remote_buffer = response_handler(remote_buffer)
+			client_socket.send(remote_buffer)
+			print("[<==] Sent to localhost.")
+
+		if not len(local_buffer) or not len(remote_buffer):
+			client_socket.close()
+			remote_socket.close()
+			print("[*] No more data. Closing connections.")
+			break
+
+def server_loop(local_host, local_port, remote_host, remote_port, receive_first):
+	server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	try:
+		server.bind((local_host, local_port))
+	except Exception as e:
+		print('Problem on bind: %r' % e)
+		print("[!!] Failed to listen on %s:%d" % (local_host, local_port))
+		print("[!!] Check for other listening sockets or correct permissions.")
+		sys.exit(0)
+
+	print("[*] Listening on %s:%d" % (local_host, local_port))
+	server.listen(5)
+	while True:
+		client_socket, addr = server.accept()
+		# Print out the local connection information.
+		line = "> Received incoming connection from %s:%d" % (addr[0], addr[1])
+		print(line)
+		# Start a thread to talk to the remote host.
+		proxy_thread = threading.Thread(
+			target=proxy_handler,
+			args=(client_socket, remote_host, remote_port, receive_first)
+			)
+		proxy_thread.start()
+
 if __name__ == '__main__':
 	hexdump('python rocks\n and proxies roll\n')
