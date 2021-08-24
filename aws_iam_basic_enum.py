@@ -3,7 +3,7 @@ import botocore
 import pprint
 
 # See https://boto3.amazonaws.com/v1/documentation/api/latest/guide/session.html#session.
-session = boto3.session.Session(profile_name="cg_scenario1")
+session = boto3.session.Session(profile_name="cg_scenario2")
 iam = session.client("iam")
 
 INDENT = "  "
@@ -15,7 +15,8 @@ print("=====")
 users = iam.list_users()
 for user in users['Users']:
 #	pprint.pprint(user)
-	print("{0}{1}".format(INDENT, user['UserName']))
+	# See https://docs.python.org/3/tutorial/inputoutput.html#formatted-string-literals.
+	print(f"{INDENT}{user['UserName']}")
 
 print() # Newline for space between sections.
 print("Groups")
@@ -25,7 +26,7 @@ print("======")
 groups = iam.list_groups()
 for group in groups['Groups']:
 #	pprint.pprint(group)
-	print("{0}{1}".format(INDENT, user['GroupName']))
+	print(f"{INDENT}{user['GroupName']}")
 
 print() # Newline for space between sections.
 print("Access Keys")
@@ -37,4 +38,4 @@ for metadata_record in response['AccessKeyMetadata']:
 #	pprint.pprint(metadata_record)
 	akey_id = metadata_record['AccessKeyId']
 	user_name = metadata_record['UserName']
-	print("{0}Access Key ID = {1}, Username = {2}".format(INDENT, akey_id, user_name))
+	print(f"{INDENT}Access Key ID = {akey_id}, Username = {user_name}")
