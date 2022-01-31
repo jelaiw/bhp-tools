@@ -3,14 +3,14 @@ on: [push]
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-20.04
-	steps:
-	  - run: echo "Job triggered automatically by ${{ github.event_name }} event."
-	  - run: echo "Job running on a ${{ runner.os }} server hosted by GitHub."
-	  - run: echo "The name of your branch is ${{ github.ref }}."
-	  - run: echo "Your repository is ${{ github.repository }}."
-	  - name: Check out repository code
-	    uses: actions/checkout@v2
-	  - run: echo "The ${{ github.repository }} is now cloned to runner."
-	  - name: List files in the repository
-	    run: ls ${{ github.workspace }}
-	  - run: echo "Job status is ${{ job.status }}."
+    steps:
+      - run: echo "Job triggered automatically by ${{ github.event_name }} event."
+      - run: echo "Job running on a ${{ runner.os }} server hosted by GitHub."
+      - run: echo "The name of your branch is ${{ github.ref }}."
+      - run: echo "Your repository is ${{ github.repository }}."
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - run: echo "The ${{ github.repository }} is now cloned to runner."
+      - name: List files in the repository
+        run: ls ${{ github.workspace }}
+      - run: echo "Job status is ${{ job.status }}."
