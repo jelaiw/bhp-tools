@@ -5,6 +5,7 @@ import time
 import requests
 import sys
 import threading
+import random
 
 FILTERED = [".jpg", ".gif", ".png", ".css"]
 # Try Wordpress in a Docker container for a mapper target.
@@ -19,7 +20,9 @@ def test_remote():
 	while not web_paths.empty():
 		path = web_paths.get()
 		url = f'{TARGET}{path}'
-		time.sleep(2) # Try to avoid target throttling/lockout protection.
+		# See https://docs.python.org/3/library/time.html#time.sleep.
+		# See https://docs.python.org/3/library/random.html#real-valued-distributions.
+		time.sleep(random.uniform(0.99, 2.99)) # Try to avoid target throttling/lockout protection.
 		r = requests.get(url)
 		if r.status_code == 200:
 			answers.put(url)
