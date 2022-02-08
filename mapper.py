@@ -7,7 +7,9 @@ import sys
 import threading
 
 FILTERED = [".jpg", ".gif", ".png", ".css"]
-TARGET = "http://example.com"
+# Try Wordpress in a Docker container for a mapper target.
+# See Docker Hub at https://hub.docker.com/_/wordpress.
+TARGET = "http://localhost:8080"
 THREADS = 8
 
 web_paths = queue.Queue()
