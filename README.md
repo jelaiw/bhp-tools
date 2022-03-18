@@ -10,3 +10,5 @@ Programming exercises from Black Hat Python book.
 | `mapper.py` | "Mapping the WordPress Framework" exercise from Ch. 5 |
 | `bruter.py` | "Brute-forcing Directories and File Locations" exercise from Ch. 5 |
 | `SVNDigger-all.txt` | Word list for `bruter.py`. |
+| `wp_killer.py` | "Brute-Forcing HTML Form Authentication" exercise from Ch. 5 |
+| `wp-login.php` | An example WordPress login page for `wp_killer.py`. |
