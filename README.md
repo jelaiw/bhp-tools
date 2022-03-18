@@ -1,5 +1,5 @@
 ## Overview
-Programming exercises from Black Hat Python book.
+Programming exercises from the excellent _Black Hat Python_ book by Justin Seitz and Tim Arnold.
 
 ## Index
 | File | Notes |
